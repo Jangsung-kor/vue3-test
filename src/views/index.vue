@@ -5,14 +5,14 @@
             <HelloVue3 msg="vue3에 오신 걸 환영합니다." />
         </el-tab-pane>
         <el-tab-pane :label="tabs.three.label" :name="tabs.three.name">
-            <HelloThree />
+            <HelloThree :active="tabs.three.name === activeName" />
         </el-tab-pane>
     </el-tabs>
 </template>
 <script setup>
 import { ref, reactive, createApp } from 'vue'
-import HelloVue3 from '@/components/HelloVue3.vue'
-import HelloThree from '@/components/HelloThree.vue'
+import HelloVue3 from '@/views/HelloVue3.vue'
+import HelloThree from '@/views/HelloThree.vue'
 
 createApp({
     name: 'mainIndex',
