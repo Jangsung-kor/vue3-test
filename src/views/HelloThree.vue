@@ -8,6 +8,9 @@
             <el-tab-pane type="card" :label="tabs.primitives.label" :name="tabs.primitives.name">
                 <Primitives :activeTab="tabs.primitives.name === activeName && active"/>
             </el-tab-pane>
+            <el-tab-pane type="card" :label="tabs.sceneGraph.label" :name="tabs.sceneGraph.name">
+                <SceneGraph :activeTab="tabs.sceneGraph.name === activeName && active"/>
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -15,12 +18,14 @@
 import { createApp, reactive, ref } from 'vue'
 import ThreeEx01 from '@/views/three/ThreeEx01.vue'
 import Primitives from '@/views/three/Primitives.vue'
+import SceneGraph from '@/views/three/SceneGraph.vue'
 
 createApp({
     name: 'HelloThree',
     components: {
         ThreeEx01,
         Primitives,
+        SceneGraph,
     }
 })
 
@@ -41,6 +46,10 @@ const tabs = reactive({
     primitives: {
         name: 'primitives',
         label: 'primitives',
-    }
+    },
+    sceneGraph: {
+        name: 'sceneGraph',
+        label: 'sceneGraph',
+    },
 })
 </script>
