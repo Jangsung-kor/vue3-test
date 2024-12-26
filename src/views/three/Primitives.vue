@@ -40,7 +40,41 @@ function createHeart() {
         
     })
 }
+// 물레로 도형 만들기
+function createLathe() {
+    const points = [];
+    for(let i = 0; i < 10; i++) {
+        points.push(new THREE.Vector2(Math.sin(i * 0.2) * 0.3 + 3, (i - 5) * 0.8));
+    }
 
+    return new THREE.LatheGeometry(points);
+}
+
+// 매개변수 만들기
+function createParametric() {
+    function klein(v, u, target) {
+        v *= Math.PI;
+        u *= Math.PI;
+        u = u * 2;
+
+        let x;
+        let z ;
+
+        if (u <= Math.PI) {
+            x = 3 * Math.cos(u) * (1 + Math.sin(u)) + (2 * (1 - Math.cos(u) / 2)) * Math.cos(u) * Math.cos(v);
+            z = -8 * Math.sin(u) - 2 * (1 - Math.cos(u) / 2) * Math.sin(u) * Math.cos(v);
+        } else {
+            x = 3 * Math.cos(u) * (1 + Math.sin(u)) + (2 * (1 - Math.cos(u) / 2)) * Math.cos(v + Math.PI);
+            z = -8 * Math.sin(u);
+        }
+
+        const y = -2 * (1 - Math.cos(u) / 2) * Math.sin(v);
+        target.set(x, y, z).multiplyScalar(0.75);
+    }
+    const slices = 25;
+    const stacks = 25;
+    return new THREE.ParametricGeometry(klein, slices, stacks);
+}
 
 function main() {
     const canvas = document.querySelector('#canvas1');
@@ -51,19 +85,28 @@ function main() {
     const near = 0.1;
     const far = 1000;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.z = 12;
+    camera.position.z = 36;
 
     // scene
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
     // geometry
     const geometrys = [
-        new THREE.BoxGeometry(1, 1, 1), // 육면체(box)
-        new THREE.CircleGeometry(1), // 원(circle)
-        new THREE.ConeGeometry(1, 1), // 원뿔(cone)
-        new THREE.CylinderGeometry(1, 1, 1), // 원통(cylinder)
-        new THREE.DodecahedronGeometry(1, 1), // 십이면체(Dodecahedron)
+        new THREE.BoxGeometry(3, 3, 3), // 육면체(box)
+        new THREE.CircleGeometry(3), // 원(circle)
+        new THREE.ConeGeometry(3, 3), // 원뿔(cone)
+        new THREE.CylinderGeometry(3, 3, 3), // 원통(cylinder)
+        new THREE.DodecahedronGeometry(3, 3), // 십이면체(Dodecahedron)
         createHeart(),
+        new THREE.IcosahedronGeometry(3), // 이십면체(Icosahedron)
+        createLathe(),
+        new THREE.OctahedronGeometry(3), // 팔면체(Octahedron)\
+        //createParametric(),
+        new THREE.PlaneGeometry(3), // 2D 평면
+        new THREE.RingGeometry(1, 3), // 2D 디스크
+        new THREE.TorusGeometry(3, 2, 6), // 원환체 도넛
+        new THREE.TorusKnotGeometry(3, 1),  //  원환체 매듭
+        new THREE.EdgesGeometry(new THREE.BoxGeometry(3, 3, 3, 2, 2, 2)),
     ]
 
     // 광원 추가
@@ -89,10 +132,18 @@ function main() {
     const meshes = [];
     geometrys.forEach((geometry, index) => {
         const mesh = new THREE.Mesh(geometry, material);
-        mesh.position.x = -12 + index * 4;
+        let x = -24;
         if (index < 7) {
-            mesh.position.y = 5;
+            x = x + index * 8;
+            mesh.position.x = x;
+            mesh.position.y = 18;
         } else if (index < 14) {
+            x = x + (index - 7) * 8
+            mesh.position.x = x;
+            mesh.position.y = 9;
+        } else if (index < 21) {
+            x = x + (index - 14) * 8
+            mesh.position.x = x;
             mesh.position.y = 0;
         }
         scene.add(mesh);
