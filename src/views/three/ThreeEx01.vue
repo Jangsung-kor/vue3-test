@@ -29,7 +29,7 @@ const props = defineProps({
 
 watch(() => props.activeTab, (active) => {
     if (active) {
-        //main();
+        main();
     }
 })
 

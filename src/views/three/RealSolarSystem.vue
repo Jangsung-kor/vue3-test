@@ -1,6 +1,5 @@
 <template>
   <div>
-    실제 태양계 모델
     <canvas id="canvas3" />
   </div>
 </template>

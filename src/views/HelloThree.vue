@@ -14,6 +14,9 @@
             <el-tab-pane type="card" :label="tabs.realSolarSystem.label" :name="tabs.realSolarSystem.name"> 
                 <RealSolarSystem :activeTab="tabs.realSolarSystem.name === activeName && active" />
             </el-tab-pane>
+            <el-tab-pane type="card" :label="tabs.threeTexture.label" :name="tabs.threeTexture.name">
+                <ThreeTexture :activeTab="tabs.threeTexture.name === activeName && active" />
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -23,6 +26,7 @@ import ThreeEx01 from '@/views/three/ThreeEx01.vue'
 import Primitives from '@/views/three/Primitives.vue'
 import SceneGraph from '@/views/three/SceneGraph.vue'
 import RealSolarSystem from '@/views/three/RealSolarSystem.vue';
+import ThreeTexture from '@/views/three/ThreeTexture.vue';
 
 createApp({
     name: 'HelloThree',
@@ -30,7 +34,8 @@ createApp({
         ThreeEx01,
         Primitives,
         SceneGraph,
-        RealSolarSystem
+        RealSolarSystem,
+        ThreeTexture,
     }
 })
 
@@ -59,6 +64,10 @@ const tabs = reactive({
     realSolarSystem: {
         name: 'realSolarSystem',
         label: 'realSolarSystem'
+    },
+    threeTexture: {
+        name: 'threeTexture',
+        label: 'threeTexture',
     }
 })
 </script>

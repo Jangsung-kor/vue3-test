@@ -4,7 +4,7 @@
     </div>
 </template>
 <script setup type="module">
-import { createApp, watch } from 'vue'
+import { createApp, watch, defineProps } from 'vue'
 import * as THREE from 'three'
 import GUI from 'lil-gui'
 
