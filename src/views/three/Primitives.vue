@@ -3,9 +3,11 @@
         <canvas id="canvas1" />
     </div>
 </template>
-<script setup type="module">
+<script setup>
 import { createApp, watch } from 'vue'
 import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+
 createApp({
     name: 'Primitives',
 })
@@ -86,6 +88,11 @@ function main() {
     const far = 1000;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.z = 36;
+
+    // OrbitControls
+    const controls = new OrbitControls(camera, canvas);
+    controls.target.set(0, 5, 0);   // 시점을 중점에서 5칸 올리기
+    controls.update();    
 
     // scene
     const scene = new THREE.Scene();
