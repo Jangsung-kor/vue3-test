@@ -20,6 +20,9 @@
             <el-tab-pane type="card" :label="tabs.threeLight.label" :name="tabs.threeLight.name">
                 <ThreeLight :activeTab="tabs.threeLight.name === activeName && active" />
             </el-tab-pane>
+            <el-tab-pane type="card" :label="tabs.threeCamera.label" :name="tabs.threeCamera.name">
+                <ThreeCamera :activeTab="tabs.threeCamera.name === activeName && active" />
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -31,6 +34,7 @@ import SceneGraph from '@/views/three/SceneGraph.vue'
 import RealSolarSystem from '@/views/three/RealSolarSystem.vue';
 import ThreeTexture from '@/views/three/ThreeTexture.vue';
 import ThreeLight from '@/views/three/ThreeLight.vue';
+import ThreeCamera from '@/views/three/ThreeCamera.vue';
 
 createApp({
     name: 'HelloThree',
@@ -41,6 +45,7 @@ createApp({
         RealSolarSystem,
         ThreeTexture,
         ThreeLight,
+        ThreeCamera,
     }
 })
 
@@ -77,6 +82,10 @@ const tabs = reactive({
     threeLight: {
         name: 'threeLight',
         label: 'threeLight',
+    },
+    threeCamera: {
+        name: 'threeCamera',
+        label: 'threeCamera',
     }
 })
 </script>
