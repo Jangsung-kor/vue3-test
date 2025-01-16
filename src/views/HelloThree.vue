@@ -29,6 +29,9 @@
             <el-tab-pane type="card" :label="tabs.threeFog.label" :name="tabs.threeFog.name">
                 <ThreeFog :activeTab="tabs.threeFog.name === activeName && active" />
             </el-tab-pane>
+            <el-tab-pane type="card" :label="tabs.renderTargets.label" :name="tabs.renderTargets.name">
+                <RenderTargets :activeTab="tabs.renderTargets.name === activeName && active" />
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -43,6 +46,7 @@ import ThreeLight from '@/views/three/ThreeLight.vue';
 import ThreeCamera from '@/views/three/ThreeCamera.vue';
 import ThreeShadows from '@/views/three/ThreeShadows.vue';
 import ThreeFog from '@/views/three/ThreeFog.vue';
+import RenderTargets from '@/views/three/RenderTargets.vue';
 
 createApp({
     name: 'HelloThree',
@@ -56,6 +60,7 @@ createApp({
         ThreeCamera,
         ThreeShadows,
         ThreeFog,
+        RenderTargets,
     }
 })
 
@@ -104,6 +109,10 @@ const tabs = reactive({
     threeFog: {
         name: 'threeFog',
         label: 'threeFog',
+    },
+    renderTargets: {
+        name: 'renderTargets',
+        label: 'renderTargets',
     },
 })
 </script>
