@@ -40,6 +40,7 @@ function main() {
 
     // OrbitControls
     const controls = new OrbitControls(camera, canvas);
+    controls.enableDamping = true;
     controls.target.set(0, 5, 0);   // 시점을 중점에서 5칸 올리기
     controls.update();
 
@@ -165,17 +166,33 @@ function main() {
         return needResize;
     }
 
+    let renderRequested = false;
     function render() {
+        renderer.render(scene, camera);
+        renderRequested = false;
+
         if (resizeCanvasToDisplaySize(renderer)) {
             const canvas = renderer.domElement;
             camera.aspect = canvas.clientWidth / canvas.clientHeight;
             camera.updateProjectionMatrix();
         }
 
-        renderer.render(scene, camera);
-        requestAnimationFrame(render);
+        controls.update();
+        //requestAnimationFrame(render);
     }
-    requestAnimationFrame(render);
+    renderer.render(scene, camera);
+    //render();
+    //requestAnimationFrame(render);
+
+    function requestRenderIfNotRequested() {
+        if (!renderRequested) {
+            renderRequested = true;
+            requestAnimationFrame(render);
+        }
+    }
+
+    controls.addEventListener('change', requestRenderIfNotRequested);
+    window.addEventListener('resize', requestRenderIfNotRequested);
 }
 </script>
 <style>

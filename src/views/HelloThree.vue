@@ -3,15 +3,15 @@
     <div>
         <el-tabs v-model="activeName">
             <el-tab-pane type="card" :label="tabs.ex01.label" :name="tabs.ex01.name">
-                <ThreeEx01 :activeTab="tabs.ex01.name === activeName && active"/>
+                <ThreeEx01 :activeTab="tabs.ex01.name === activeName && active" />
             </el-tab-pane>
             <el-tab-pane type="card" :label="tabs.primitives.label" :name="tabs.primitives.name">
-                <Primitives :activeTab="tabs.primitives.name === activeName && active"/>
+                <Primitives :activeTab="tabs.primitives.name === activeName && active" />
             </el-tab-pane>
             <el-tab-pane type="card" :label="tabs.sceneGraph.label" :name="tabs.sceneGraph.name">
-                <SceneGraph :activeTab="tabs.sceneGraph.name === activeName && active"/>
+                <SceneGraph :activeTab="tabs.sceneGraph.name === activeName && active" />
             </el-tab-pane>
-            <el-tab-pane type="card" :label="tabs.realSolarSystem.label" :name="tabs.realSolarSystem.name"> 
+            <el-tab-pane type="card" :label="tabs.realSolarSystem.label" :name="tabs.realSolarSystem.name">
                 <RealSolarSystem :activeTab="tabs.realSolarSystem.name === activeName && active" />
             </el-tab-pane>
             <el-tab-pane type="card" :label="tabs.threeTexture.label" :name="tabs.threeTexture.name">
@@ -32,6 +32,9 @@
             <el-tab-pane type="card" :label="tabs.renderTargets.label" :name="tabs.renderTargets.name">
                 <RenderTargets :activeTab="tabs.renderTargets.name === activeName && active" />
             </el-tab-pane>
+            <el-tab-pane type="card" :label="tabs.bufferGeometry.label" :name="tabs.bufferGeometry.name">
+                <BufferGeometry :activeTab="tabs.bufferGeometry.name === activeName && active" />
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -47,6 +50,7 @@ import ThreeCamera from '@/views/three/ThreeCamera.vue';
 import ThreeShadows from '@/views/three/ThreeShadows.vue';
 import ThreeFog from '@/views/three/ThreeFog.vue';
 import RenderTargets from '@/views/three/RenderTargets.vue';
+import BufferGeometry from '@/views/three/BufferGeometry.vue';
 
 createApp({
     name: 'HelloThree',
@@ -61,6 +65,7 @@ createApp({
         ThreeShadows,
         ThreeFog,
         RenderTargets,
+        BufferGeometry,
     }
 })
 
@@ -114,5 +119,9 @@ const tabs = reactive({
         name: 'renderTargets',
         label: 'renderTargets',
     },
+    bufferGeometry: {
+        name: 'bufferGeometry',
+        label: 'bufferGeometry',
+    }
 })
 </script>
