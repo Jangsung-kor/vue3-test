@@ -1,6 +1,20 @@
 <template>
   <div>
     <canvas id="canvas3" />
+    <div id="debug">
+      <div>
+        x:
+        <span id="x" />
+      </div>
+      <div>
+        y:
+        <span id="y" />
+      </div>
+      <div>
+        z:
+        <span id="z" />
+      </div>
+    </div>
   </div>
 </template>
 <script setup type="module">
@@ -27,7 +41,7 @@ watch(() => props.activeTab, (active) => {
 
 function main() {
   const canvas = document.querySelector('#canvas3');
-  const renderer = new THREE.WebGLRenderer({ antialias: true, canvas});
+  const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
   const scene = new THREE.Scene();
 
   // 구 생성
@@ -41,18 +55,18 @@ function main() {
   scene.add(solarSystem);
 
   // 태양 생성
-  const sunMaterial = new THREE.MeshPhongMaterial({ emissive: 0xffff00});
+  const sunMaterial = new THREE.MeshPhongMaterial({ emissive: 0xffff00 });
   const sunMesh = new THREE.Mesh(sphereGeometry, sunMaterial);
   sunMesh.scale.set(3, 3, 3);
   solarSystem.add(sunMesh);
-  
+
   // 지구 궤도 생성
   const earthOrbit = new THREE.Object3D();
   earthOrbit.position.x = 9;
   solarSystem.add(earthOrbit);
 
   // 지구 생성
-  const earthMaterial = new THREE.MeshPhongMaterial({ color: 0x2233ff, emissive: 0x112244});
+  const earthMaterial = new THREE.MeshPhongMaterial({ color: 0x2233ff, emissive: 0x112244 });
   const earthMesh = new THREE.Mesh(sphereGeometry, earthMaterial);
   earthOrbit.add(earthMesh);
 
@@ -61,7 +75,7 @@ function main() {
   moonOrbit.position.x = 3;
   earthOrbit.add(moonOrbit);
 
-  const moonMaterial = new THREE.MeshPhongMaterial({ color: 0x888888, emissive: 0x222222});
+  const moonMaterial = new THREE.MeshPhongMaterial({ color: 0x888888, emissive: 0x222222 });
   const moonMesh = new THREE.Mesh(sphereGeometry, moonMaterial);
   moonMesh.scale.set(0.5, 0.5, 0.5);
   moonOrbit.add(moonMesh);
@@ -80,23 +94,27 @@ function main() {
   camera.lookAt(0, 0, 0);
 
   function resizeRendererToDisplaySize(renderer) {
-        const canvas = renderer.domElement;
-        const width = canvas.clientWidth;
-        const height = canvas.clientHeight;
-        const needResize = canvas.width !== width || canvas.height !== height;
-        if (needResize) {
-            renderer.setSize(width, height, false);
-        }
-        return needResize;
-    }  
+    const canvas = renderer.domElement;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+    }
+    return needResize;
+  }
+
+  const xElem = document.querySelector('#x');
+  const yElem = document.querySelector('#y');
+  const zElem = document.querySelector('#z');
 
   function render(time) {
     time *= 0.01;
 
     if (resizeRendererToDisplaySize(renderer)) {
-            const canvas = renderer.domElement;
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
+      const canvas = renderer.domElement;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
     }
 
     solarSystem.rotation.y = time / 365; // 지구 공전
@@ -104,7 +122,11 @@ function main() {
     earthOrbit.rotation.y = 0;  // 달 공전
     earthMesh.rotation.y = time; // 지구 자전
     moonMesh.rotation.y = time / 27; // 달 자전
-    
+
+    xElem.textContent = earthOrbit.position.x.toFixed(3);
+    yElem.textContent = earthOrbit.position.y.toFixed(3);
+    zElem.textContent = earthOrbit.position.z.toFixed(3);
+
     renderer.render(scene, camera);
     requestAnimationFrame(render);
   }
@@ -115,8 +137,18 @@ function main() {
 </script>
 <style>
 #canvas3 {
-    width: 100%;
-    height: 100%;
-    display: block;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#debug {
+  position: absolute;
+  left: 1em;
+  top: 1em;
+  padding: 1em;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  font-family: monospace;
 }
 </style>

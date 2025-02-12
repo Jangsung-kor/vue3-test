@@ -8,6 +8,8 @@
 import { watch } from 'vue'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js'
 import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js'
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js'
 
@@ -65,10 +67,6 @@ function main() {
             map: texture,
             side: THREE.DoubleSide,
         })
-        // const planeMat = new THREE.MeshStandardMaterial({
-        //     map: texture,
-        //     side: THREE.DoubleSide,
-        // })
         const mesh = new THREE.Mesh(planeGeo, planeMat);
         mesh.receiveShadow = true;
         mesh.rotation.x = Math.PI * -0.5;   // XY축인 평면을 XZ축을 평면으로 하기 위해 회전시키기 90도
@@ -92,7 +90,6 @@ function main() {
         const cubeSize = 4;
         const cubeGeo = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
         const cubeMat = new THREE.MeshPhongMaterial({ color: '#8AC' });
-        //const cubeMat = new THREE.MeshStandardMaterial({ color: '#8AC' })
         const mesh = new THREE.Mesh(cubeGeo, cubeMat);
         mesh.castShadow = true;
         mesh.receiveShadow = true;
@@ -106,54 +103,41 @@ function main() {
         const sphereHeightDivisions = 16;
         const sphereGeo = new THREE.SphereGeometry(sphereRadius, sphereWidthDivisions, sphereHeightDivisions);
         const sphereMat = new THREE.MeshPhongMaterial({ color: '#CA8' });
-        //const sphereMat = new THREE.MeshStandardMaterial({ color: '#CA8' });
         const mesh = new THREE.Mesh(sphereGeo, sphereMat);
         mesh.castShadow = true;
         mesh.receiveShadow = true;
-        mesh.position.set(-sphereRadius - 1, sphereRadius + 2, 0);
+        mesh.position.set(-sphereRadius - 2, sphereRadius + 2, 0);
         scene.add(mesh);
     }
     {
         const color = 0xFFFFFF;
         const intensity = 100;
-        // AmbientLight(자연광) : 방향이 없는 빛이다. 모니터 밝기 느낌.
-        //const light = new THREE.AmbientLight(color, intensity);
-        // HemisphereLight(반구광) : 자연광의 특성에서 위쪽과 아래쪽 색상이 변경가능한 정도.
-        //const skyColor = 0xB1E1FF; // 하늘색
-        //const groundColor = 0xB97a20; // 오렌지 브라운
-        //const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
-        // DirectionalLight(직사광) : 태양 빛 느낌.
-        //const light = new THREE.DirectionalLight(color, intensity);
-        //const helper = new THREE.DirectionalLightHelper(light);
         // pointLight : 한 점에서 무한히 뻗어나가는 광원
         const light = new THREE.PointLight(color, intensity);
         const helper = new THREE.PointLightHelper(light);
-        // spotLight : 원뿔 모양의 pointLight
-        //const light = new THREE.SpotLight(color, intensity);
-        //const helper = new THREE.SpotLightHelper(light);
-        // rectAreaLight : 사각 조명. 형광등이나 유리를 통과하는 태양빛. 
-        // rectAreaLight는 MeshStandardMaterial과 MeshPhysicalMaterial만 지원
-        //const width = 12;
-        //const height = 4;
-        //const light = new THREE.RectAreaLight(color, intensity, width, height);
-        light.castShadow = true;
-        light.position.set(0, 10, 0);
-        //light.target.position.set(-4, 0, -4);
-        //light.rotation.x = THREE.MathUtils.degToRad(-90);
-        //const helper = new RectAreaLightHelper(light);
-        scene.add(light);
-        //scene.add(light.target);
-        scene.add(helper);
-
         const cameraHelper = new THREE.CameraHelper(light.shadow.camera);
+        
+        // 그림자 설정
+        light.castShadow = true;
+        
+        // 조명 위치 설정 (위에서 비스듬히 비추도록)
+        light.position.set(5, 15, 10);
+        
+        scene.add(light);
+        scene.add(helper);
         scene.add(cameraHelper);
-
-        function updateLight() {
-            light.target.updateMatrixWorld();
-            helper.update();
-        }
-
-        //updateLight();
+    }
+    // .obj 파일
+    {
+        const mtlLoader = new MTLLoader();
+        mtlLoader.load('/models/windmill_001.mtl', (mtl) => {
+            mtl.preload();
+            const objLoader = new OBJLoader();
+            objLoader.setMaterials(mtl);
+            objLoader.load('/models/windmill_001.obj', (root) => {
+                scene.add(root);
+            });
+        });
     }
     function resizeCanvasToDisplaySize(renderer) {
         const canvas = renderer.domElement;
@@ -178,11 +162,8 @@ function main() {
         }
 
         controls.update();
-        //requestAnimationFrame(render);
     }
     renderer.render(scene, camera);
-    //render();
-    //requestAnimationFrame(render);
 
     function requestRenderIfNotRequested() {
         if (!renderRequested) {
