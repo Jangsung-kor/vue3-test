@@ -48,10 +48,10 @@ function main() {
     const near = 0.1;
     const far = 5;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.z = 2;
+    camera.position.z = 5;
 
     const controls = new OrbitControls(camera, canvas);
-    controls.target.set(0, 5, 0);
+    controls.target.set(0, 0, 0);
     controls.update();
 
     const scene = new THREE.Scene();
@@ -59,8 +59,8 @@ function main() {
     // 안개
     {
         const color = 'lightblue';
-        const near = 1;
-        const far = 3;
+        const near = 0.5;
+        const far = 12;
         scene.fog = new THREE.Fog(color, near, far);
         scene.background = new THREE.Color(color);
     }
@@ -77,8 +77,8 @@ function main() {
     }
 
     // 형상
-    const boxWidth = 1;
-    const boxHeight = 1;
+    const boxWidth = 2;
+    const boxHeight = 2;
     const boxDepth = 1;
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
 
@@ -94,8 +94,8 @@ function main() {
 
     const cubes = [
         makeInstance(geometry, 0x44aa88, 0),
-        makeInstance(geometry, 0x8844aa, -2),
-        makeInstance(geometry, 0xaa8844, 2),
+        makeInstance(geometry, 0x8844aa, -3),
+        makeInstance(geometry, 0xaa8844, 3),
     ]
 
     function resizeRendererToDisplaySize(renderer) {
