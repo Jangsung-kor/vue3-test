@@ -7,18 +7,23 @@
         <el-tab-pane :label="tabs.three.label" :name="tabs.three.name">
             <HelloThree :active="tabs.three.name === activeName" />
         </el-tab-pane>
+        <el-tab-pane :label="tabs.threeBasic.label" :name="tabs.threeBasic.name">
+            <ThreeBasic :active="tabs.threeBasic.name === activeName" />
+        </el-tab-pane>
     </el-tabs>
 </template>
 <script setup>
 import { ref, reactive, createApp } from 'vue'
 import HelloVue3 from '@/views/HelloVue3.vue'
 import HelloThree from '@/views/HelloThree.vue'
+import ThreeBasic from '@/views/ThreeBasic.vue'
 
 createApp({
     name: 'mainIndex',
     components: {
         HelloVue3,
         HelloThree,
+        ThreeBasic,
     }
 })
 
@@ -31,6 +36,10 @@ const tabs = reactive({
     three: {
         name: 'three',
         label: 'three',
-    }
+    },
+    threeBasic: {
+        name: 'threeBasic',
+        label: 'three 기본',
+    },
 })
 </script>

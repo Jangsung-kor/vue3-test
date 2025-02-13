@@ -112,7 +112,6 @@ function main() {
 
     // 애니메이션을 위한 루프 함수
     function render() {
-        console.log('렌더?');
         //time *= 0.001; // 1 = 1ms, 0.001 -> 1000배 느려진 것. 즉, 1s
 
         // cubes.forEach((cube, ndx) => {
