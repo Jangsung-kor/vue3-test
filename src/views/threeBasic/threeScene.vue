@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<div id="webgl-container2" />
+		<div id="webgl-container3" />
 	</div>
 </template>
 
@@ -22,6 +22,9 @@ const three = {
     scene: null,
     camera: null,
     cube: null,
+    solarSystem: null,
+    earthOrbit: null,
+    moonOrbit: null,
 }
 let animationFrameId = null;
 const divContainer = ref(null);
@@ -36,7 +39,7 @@ watch(() => props.active, (active) => {
 })
 
 function init() {
-	divContainer.value = document.querySelector("#webgl-container2");
+	divContainer.value = document.querySelector("#webgl-container3");
 
 	// antialias : 오브젝트 경계선을 부드럽게 할 것이냐 말 것이냐.
 	three.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -63,7 +66,7 @@ function setupCamera() {
 	const width = divContainer.value.clientWidth;
 	const height = divContainer.value.clientHeight;
 	three.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-	three.camera.position.z = 10;
+	three.camera.position.z = 20;
 }
 
 /**
@@ -80,55 +83,51 @@ function setupLight() {
 /**
  * 형상 세팅
  */
- function setupModel() {
-	const points = [];
-	for (let i = 0; i < 10; ++i) {
-		points.push(new THREE.Vector2(Math.sin(i * 0.2) * 3 + 3, (i - 5) * 0.8));
-	}
+function setupModel() {
+    const solarSystem = new THREE.Object3D();
+    three.scene.add(solarSystem);
 
-	const geometry = new THREE.LatheGeometry(points, 6, 0, Math.PI);
+    // // 태양 크기
+    const radius = 1;
+    const widthSegments = 12;
+    const heightSegments = 12;
+    const sphereGeometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
 
-	const fillMaterial = new THREE.MeshPhongMaterial({color: 0x515151});
-	const cube = new THREE.Mesh(geometry, fillMaterial);
+    const sunMaterial = new THREE.MeshPhongMaterial({
+        emissive: 0xffff00, flatShading: true
+    });
 
-    const lineMaterial = new THREE.LineBasicMaterial({color: 0xffff00});
-    const line = new THREE.LineSegments(
-        new THREE.WireframeGeometry(geometry), lineMaterial
-    );
+    const sunMesh = new THREE.Mesh(sphereGeometry, sunMaterial);
+    sunMesh.scale.set(3, 3, 3);
+    solarSystem.add(sunMesh);
 
-    const group = new THREE.Group();
-    group.add(cube);
-    group.add(line);
+    const earthOrbit = new THREE.Object3D();
+    solarSystem.add(earthOrbit);
+    earthOrbit.position.x = 10; // 태양에서 10만큼 떨어진 곳곳
 
-	three.scene.add(group);
-    three.cube = group;
+    const earthMaterial = new THREE.MeshPhongMaterial({
+        color: 0x2233ff, emissive: 0x112244, flatShading: true
+    });
+
+    const earthMesh = new THREE.Mesh(sphereGeometry, earthMaterial);
+    earthOrbit.add(earthMesh);
+
+    const moonOrbit = new THREE.Object3D();
+    earthOrbit.add(moonOrbit);
+    moonOrbit.position.x = 3;
+
+    const moonMaterial = new THREE.MeshPhongMaterial({
+        color: 0x888888, emissive: 0x222222, flatShading: true
+    });
+
+    const moonMesh = new THREE.Mesh(sphereGeometry, moonMaterial);
+    moonMesh.scale.set(0.3, 0.3, 0.3);
+    moonOrbit.add(moonMesh);
+
+    three.solarSystem = solarSystem;
+    three.earthOrbit = earthOrbit;
+    three.moonOrbit = moonOrbit;
 }
-
-// function setupModel() {
-// 	class CustomSinCurve extends THREE.Curve {
-// 		constructor(scale) {
-// 			super();
-// 			this.scale = scale;
-// 		}
-// 		getPoint(t) {
-// 			const tx = t * 3 - 1.5;
-// 			const ty = Math.sin(2 * Math.PI * t);
-// 			const tz = 0;
-// 			return new THREE.Vector3(tx, ty, tz).multiplyScalar(this.scale);
-// 		}
-// 	}
-
-// 	const path = new CustomSinCurve(4);
-
-// 	const geometry = new THREE.BufferGeometry();
-// 	const points = path.getPoints(15);
-// 	geometry.setFromPoints(points);
-
-// 	const material = new THREE.LineBasicMaterial({color: 0xffff00});
-// 	const line = new THREE.Line(geometry, material);
-
-// 	three.scene.add(line);
-// }
 
 function setupControls() {
     new OrbitControls(three.camera, divContainer.value);
@@ -152,7 +151,7 @@ function resize() {
  * @param {Number} time 단위가 ms인 값값 
  */
 function render(time) {
-    console.log('지오메트리 render');
+    console.log('씬 Sceme');
 	// camera 시점을 이용해서 scene을 렌더링해라.!
 	three.renderer.render(three.scene, three.camera);
 	update(time);
@@ -162,8 +161,10 @@ function render(time) {
 
 function update(time) {
 	time *= 0.001;
-	//three.cube.rotation.x = time;
-	//three.cube.rotation.y = time;
+	
+    three.solarSystem.rotation.y = time / 2;
+    three.earthOrbit.rotation.y = time * 2;
+    three.moonOrbit.rotation.y = time * 5;
 }
 </script>
 
@@ -172,7 +173,7 @@ function update(time) {
 	width: 100%;
 	height: 100vh;
 }
-#webgl-container2 {
+#webgl-container3 {
 	position: absolute;
 	top: 0;
 	left: 0;
