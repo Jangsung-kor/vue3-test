@@ -13,6 +13,9 @@
 			<el-tab-pane :label="tabs.threeScene.label" :name="tabs.threeScene.name">
 				<ThreeScene :active="tabs.threeScene.name === activeName && active" />
 			</el-tab-pane>
+			<el-tab-pane :label="tabs.threeMaterial.label" :name="tabs.threeMaterial.name">
+				<ThreeMaterial :active="tabs.threeMaterial.name === activeName && active" />
+			</el-tab-pane>
 		</el-tabs>
 	</div>
 </template>
@@ -22,6 +25,7 @@ import { createApp, reactive, ref } from 'vue'
 import ThreeBasic from '@/views/threeBasic/threeBasic.vue'
 import ThreeGeometry from '@/views/threeBasic/threeGeometry.vue'
 import ThreeScene from '@/views/threeBasic/threeScene.vue'
+import ThreeMaterial from '@/views/threeBasic/threeMaterial.vue'
 
 createApp({
 	name: 'ThreeBasic',
@@ -29,6 +33,7 @@ createApp({
 		ThreeBasic,
 		ThreeGeometry,
 		ThreeScene,
+		ThreeMaterial,
 	}
 })
 const props = defineProps({
@@ -51,6 +56,10 @@ const tabs = reactive({
 	threeScene: {
 		name: 'threeScene',
 		label: '씬 혹은 장면',
+	},
+	threeMaterial: {
+		name: 'threeMaterial',
+		label: '재질'
 	}
 })
 </script>
